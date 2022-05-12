@@ -1,4 +1,4 @@
-#Modulo 1 - prueba
+#Modulo 1
 Sub Llenar()
 Dim StartCell As Range
 Dim LastRow As Long
@@ -18,26 +18,29 @@ Campos(5) = "H" 'SUPERVISOR
 Campos(6) = "I" 'ING. TIER 2
 Campos(7) = "J" 'ESCALACION
 Campos(8) = "K" 'TURNO
-Campos(9) = "L" 'FECHA
-Campos(10) = "N" 'CRITICIDAD
-Campos(11) = "O" 'HOSTNAME ORIGEN
-Campos(12) = "P" 'IP ORIGEN
-Campos(13) = "Q" 'CREDENCIALES
-Campos(14) = "R" 'HOSTNAME DESTINO
-Campos(15) = "S" 'IP DESTINO
-Campos(16) = "T" 'EQUIPO EN CUMPLIMIENTO
-Campos(17) = "V" 'PUERTO
-Campos(18) = "Y" 'RECEPCIÓN DE ALERTA
-Campos(19) = "Z" 'NOTIFICACIÓN DE ALERTA
-Campos(20) = "AD" 'CIERRE DE ALERTA
-Campos(21) = "AH" 'CAUSA FUERA SLA
+Campos(9) = "M" 'FECHA
+Campos(10) = "O" 'CRITICIDAD
+Campos(11) = "P" 'HOSTNAME ORIGEN
+Campos(12) = "Q" 'IP ORIGEN
+Campos(13) = "R" 'CREDENCIALES
+Campos(14) = "S" 'HOSTNAME DESTINO
+Campos(15) = "T" 'IP DESTINO
+Campos(16) = "U" 'EQUIPO EN CUMPLIMIENTO
+Campos(17) = "W" 'PUERTO
+Campos(18) = "Z" 'RECEPCIÓN DE ALERTA
+Campos(19) = "AA" 'NOTIFICACIÓN DE ALERTA
+Campos(20) = "AE" 'CIERRE DE ALERTA
+Campos(21) = "AI" 'CAUSA FUERA SLA
+
+    LastRow = Application.WorksheetFunction.CountA(Sheets("CONCENTRADO").Range("C:C")) 'Obtener cantidad de filas con registros
+    
+    MsgBox LastRow
 
     Set StartCell = Range("B1")
-    Worksheets("FORMATO CONCENTRADO").UsedRange
+    Worksheets("CONCENTRADO").UsedRange
     'Find Last Row and Column
-    LastRow = StartCell.SpecialCells(xlCellTypeLastCell).Row 'Numero de Usuarios
+    'LastRow = StartCell.SpecialCells(xlCellTypeLastCell).Row 'Numero de Usuarios
     'LastColumn = StartCell.SpecialCells(xlCellTypeLastCell).Column
-    MsgBox LastRow
     'Seccion de Loops
     For Each element In Campos
     
@@ -104,7 +107,7 @@ Campos(21) = "AH" 'CAUSA FUERA SLA
 
          Case "J" 'ESCALACION
             For i = 2 To LastRow
-                If UCase(Cells(i, "J").Value) = "TIER 2" Or UCase(Cells(i, "J").Value) = "TIER3" Or UCase(Cells(i, "J").Value) = "NO" Then
+                If UCase(Cells(i, "J").Value) = "TIER 2" Or UCase(Cells(i, "J").Value) = "TIER 3" Or UCase(Cells(i, "J").Value) = "N/A" Then
                 Cells(i, "J").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
                 Else
                 Cells(i, "J").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
@@ -119,104 +122,105 @@ Campos(21) = "AH" 'CAUSA FUERA SLA
                 Cells(i, "K").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
                 End If
             Next i
-            
-         Case "L" 'FECHA
+            MsgBox "Break"
+         Case "M" 'FECHA
             For i = 2 To LastRow
-                If IsDate(Cells(i, "L")) Then
-                    If (Cells(i, "L") <= Now) Then
-                            Cells(i, "L").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
-                        ElseIf (Cells(i, "L") > Now) Then
-                        Cells(i, "L").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
-                        MsgBox "Hola " & LCase(Cells(i, "G").Value) & " hay fechas del futuro pasado en la columna: L, fila: " & i & ", hoy es " & Now & " cambialas" 'Muestra en que fila y columna está el error
+                If IsDate(Cells(i, "M")) Then
+                    If (Cells(i, "M") <= Now) Then
+                            Cells(i, "M").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
+                        ElseIf (Cells(i, "M") > Now) Then
+                        Cells(i, "M").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
+                        MsgBox "Hola, " & LCase(Cells(i, "G").Value) & ". Hay fechas del futuro pasado en la columna: L, fila: " & i & ", hoy es " & Now & " cambialas" 'Muestra en que fila y columna está el error
                     End If
                 End If
             Next i
 
-         Case "N" 'CRITICIDAD
+         Case "O" 'CRITICIDAD
             For i = 2 To LastRow
-                If UCase(Cells(i, "N").Value) <= 5 Then
-                Cells(i, "N").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
+                If UCase(Cells(i, "O").Value) <= 5 Then
+                Cells(i, "O").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
                 Else
-                Cells(i, "N").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
+                Cells(i, "O").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
+                End If
+            Next i
+
+            
+        Case "Q" 'IP ORIGEN
+            For i = 2 To LastRow
+                If ValidaIP(Cells(i, "Q").Value) = True Then
+                Cells(i, "Q").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
+                Else
+                Cells(i, "Q").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
                 End If
             Next i
             
-        Case "P" 'IP ORIGEN
+        Case "T" 'IP DESTINO
             For i = 2 To LastRow
-                If ValidaIP(Cells(i, "P").Value) = True Then
-                Cells(i, "P").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
-                Else
-                Cells(i, "P").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
-                End If
-            Next i
-            
-        Case "S" 'IP DESTINO
-            For i = 2 To LastRow
-                If ValidaIP(Cells(i, "S").Value) = True Then
-                Cells(i, "S").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
-                Else
-                Cells(i, "S").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
-                End If
-            Next i
-            
-        Case "T" 'EQUIPO EN CUMPLIMIENTO
-            For i = 2 To LastRow
-                If UCase(Cells(i, "T").Value) = "EN CUMPLIMIENTO" Or UCase(Cells(i, "T").Value) = "EN INCUMPLIMIENTO" Or UCase(Cells(i, "T").Value) = "SIN DATO" Then
-                Cells(i, "T").Value = UCase(Cells(i, "T"))
+                If ValidaIP(Cells(i, "T").Value) = True Then
                 Cells(i, "T").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
                 Else
                 Cells(i, "T").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
                 End If
             Next i
             
-         Case "V" 'PUERTO
+        Case "U" 'EQUIPO EN CUMPLIMIENTO
             For i = 2 To LastRow
-                If UCase(Cells(i, "V").Value) <= 65535 Or UCase(Cells(i, "V").Value) = "MULTIPLES PUERTOS" Or UCase(Cells(i, "V").Value) = "SIN DATO" Then
-                Cells(i, "V").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
+                If UCase(Cells(i, "U").Value) = "EN CUMPLIMIENTO" Or UCase(Cells(i, "U").Value) = "EN INCUMPLIMIENTO" Or UCase(Cells(i, "U").Value) = "SIN DATO" Then
+                Cells(i, "U").Value = UCase(Cells(i, "U"))
+                Cells(i, "U").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
                 Else
-                Cells(i, "V").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
+                Cells(i, "U").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
+                End If
+            Next i
+         
+         Case "W" 'PUERTO
+            For i = 2 To LastRow
+                If UCase(Cells(i, "W").Value) <= 65535 Or UCase(Cells(i, "W").Value) = "MULTIPLES PUERTOS" Or UCase(Cells(i, "W").Value) = "SIN DATO" Then
+                Cells(i, "W").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
+                Else
+                Cells(i, "W").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
                 End If
             Next i
             
-         Case "Y" 'RECEPCIÓN DE ALERTA
+         Case "Z" 'RECEPCIÓN DE ALERTA
             For i = 2 To LastRow
-                If IsDate(Cells(i, "Y")) Then
-                    If (Cells(i, "Y") <= Now) Then
-                            Cells(i, "Y").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
-                        ElseIf (Cells(i, "Y") > Now) Then
-                        Cells(i, "Y").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
+                If IsDate(Cells(i, "Z")) Then
+                    If (Cells(i, "Z") <= Now) Then
+                            Cells(i, "Z").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
+                        ElseIf (Cells(i, "Z") > Now) Then
+                        Cells(i, "Z").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
                         MsgBox "Hola " & LCase(Cells(i, "G").Value) & " hay fechas del futuro pasado en la columna: Y, fila: " & i & ", hoy es " & Now & " cambialas" 'Muestra en que fila y columna está el error
                     End If
                 End If
             Next i
-            
-            Case "Z" 'NOTIFICACION DE LA ALERTA
+             
+            Case "AA" 'NOTIFICACION DE LA ALERTA
             For i = 2 To LastRow
-                If IsDate(Cells(i, "Z")) Then
-                    If (Cells(i, "Z") >= (Cells(i, "Y"))) Then
-                            Cells(i, "Z").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
-                        ElseIf (Cells(i, "Z") < (Cells(i, "Y"))) Then
-                        Cells(i, "Z").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
+                If IsDate(Cells(i, "AA")) Then
+                    If (Cells(i, "AA") >= (Cells(i, "Y"))) Then
+                            Cells(i, "AA").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
+                        ElseIf (Cells(i, "AA") < (Cells(i, "Y"))) Then
+                        Cells(i, "AA").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
                         MsgBox "Hola " & LCase(Cells(i, "G").Value) & " no puedes notificar una alerta antes de recibirla, en la columna: Z, fila: " & i & ", hoy es " & Now & " cambia el registro" 'Muestra en que fila y columna está el error
                     End If
                 End If
             Next i
             
-            Case "AD" 'CIERRE DE LA ALERTA
+            Case "AE" 'CIERRE DE LA ALERTA
             For i = 2 To LastRow
-                If IsDate(Cells(i, "AD")) Then
-                    If CDate(Cells(i, "AD") >= CDate(Cells(i, "Y"))) Then
-                            Cells(i, "AD").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
-                                ElseIf CDate(Cells(i, "AD") < CDate(Cells(i, "Y"))) Then
-                                Cells(i, "AD").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
+                If IsDate(Cells(i, "AE")) Then
+                    If CDate(Cells(i, "AE") >= CDate(Cells(i, "Y"))) Then
+                            Cells(i, "AE").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
+                                ElseIf CDate(Cells(i, "AE") < CDate(Cells(i, "Y"))) Then
+                                Cells(i, "AE").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
                                 MsgBox "Hola " & LCase(Cells(i, "G").Value) & " no puedes cerrar una alerta antes de recibirla, en la columna: AD, fila: " & i & ", hoy es " & Now & " cambia el registro" 'Muestra en que fila y columna está el error
                         End If
                     End If
-                                        
-                If UCase((Cells(i, "D").Value = "ON HOLD") And UCase(Cells(i, "AD").Value = "PENDIENTE")) Then
-                        Cells(i, "AD").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
-                        ElseIf UCase((Cells(i, "D").Value = "CLOSED") And UCase(Cells(i, "AD").Value = "PENDIENTE")) Then
-                            Cells(i, "AD").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
+                
+                If UCase((Cells(i, "D").Value = "ON HOLD") And UCase(Cells(i, "AE").Value = "PENDIENTE")) Then
+                        Cells(i, "AE").Interior.Color = RGB(146, 208, 80) 'Pintar de Verde si está correcto
+                        ElseIf UCase((Cells(i, "D").Value = "CLOSED") And UCase(Cells(i, "AE").Value = "PENDIENTE")) Then
+                            Cells(i, "AE").Interior.Color = RGB(255, 0, 0) 'Pintar de Rojo si no está correcto
                 End If
             Next i
             
